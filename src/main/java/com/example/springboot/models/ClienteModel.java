@@ -5,7 +5,6 @@ import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,10 +20,4 @@ public class ClienteModel extends RepresentationModel<ClienteModel> implements S
 
     private String nome;
 
-    @OneToMany( mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductModel> produtos = new ArrayList<>();
-
-    public void setProdutos(ProductModel produtos) {
-        this.produtos.add(produtos);
-    }
 }

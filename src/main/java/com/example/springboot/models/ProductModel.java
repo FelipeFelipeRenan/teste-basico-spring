@@ -22,7 +22,5 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
 
     private BigDecimal valor;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private ClienteModel cliente;
+
 }

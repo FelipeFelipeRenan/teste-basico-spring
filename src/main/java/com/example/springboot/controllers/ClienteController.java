@@ -13,6 +13,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 public class ClienteController {
 
@@ -23,31 +26,34 @@ public class ClienteController {
     ProdutoRepository produtoRepository;
 
     @GetMapping("/clientes")
-    public ResponseEntity<List<ClienteModel>> getAllCliente(){
+    public ResponseEntity<List<ClienteModel>> getAllCliente() {
         List<ClienteModel> clientesList = clienteRepository.findAll();
-        if(clientesList.isEmpty()){
+        if (clientesList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        else{
+        } else {
+            for (ClienteModel cliente : clientesList) {
+                long id = cliente.getIdCliente();
+                cliente.add(linkTo(methodOn(ClienteController.class).getOneCliente(id)).withSelfRel());
+            }
+
             return new ResponseEntity<List<ClienteModel>>(clientesList, HttpStatus.OK);
         }
     }
 
+    @GetMapping("/clientes/{id}")
+    public ResponseEntity<ClienteModel> getOneCliente(@PathVariable(value = "id") long id) {
+        Optional<ClienteModel> clienteE = clienteRepository.findById(id);
+        if (!clienteE.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            clienteE.get().add(linkTo(methodOn(ClienteController.class).getAllCliente()).withSelfRel());
+            return new ResponseEntity<ClienteModel>(clienteE.get(), HttpStatus.OK);
+        }
+    }
+
     @PostMapping("/clientes")
-    public ResponseEntity<ClienteModel> saveCliente(@RequestBody @Valid ClienteModel cliente){
+    public ResponseEntity<ClienteModel> saveCliente(@RequestBody @Valid ClienteModel cliente) {
         return new ResponseEntity<ClienteModel>(clienteRepository.save(cliente), HttpStatus.CREATED);
     }
 
-    @PutMapping("/clientes/{id}")
-    public ResponseEntity<ClienteModel> updateCliente(@PathVariable(value = "id") long id, @RequestBody @Valid ClienteModel cliente ){
-        Optional<ClienteModel> clienteE = clienteRepository.findById(id);
-        Optional<ProductModel> produtoO = produtoRepository.findById(id);
-        if(!clienteE.isPresent()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else{
-            cliente.setProdutos(produtoO.get());
-            return new ResponseEntity<ClienteModel>(clienteRepository.save(cliente), HttpStatus.OK);
-
-        }
-    }
 }
