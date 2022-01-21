@@ -6,11 +6,7 @@ import org.springframework.hateoas.RepresentationModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -26,4 +22,7 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
 
     private BigDecimal valor;
 
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private ClienteModel cliente;
 }
