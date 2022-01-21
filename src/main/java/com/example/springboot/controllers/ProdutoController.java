@@ -1,14 +1,14 @@
-package controllers;
+package com.example.springboot.controllers;
 
 
-import models.ProductModel;
+import com.example.springboot.models.ProductModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import repositories.ProdutoRepository;
+import com.example.springboot.repositories.ProdutoRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +30,7 @@ public class ProdutoController {
         }
     }
 
-    @GetMapping("/produtps/{}")
+    @GetMapping("/produtos/{id}")
     public ResponseEntity<ProductModel> getOneProduto(@PathVariable(value = "id") long id){
         Optional<ProductModel> produtoO = produtoRepository.findById(id);
         if(!produtoO.isPresent()){
@@ -40,6 +40,7 @@ public class ProdutoController {
         }
 
     }
+
 
     @GetMapping("/error")
     public String responseError(){

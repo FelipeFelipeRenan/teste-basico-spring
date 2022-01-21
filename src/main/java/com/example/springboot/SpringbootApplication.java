@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@EntityScan(basePackages = "models")
+@EntityScan(basePackages = "com/example/springboot/models")
 @SpringBootApplication
 public class SpringbootApplication {
 
