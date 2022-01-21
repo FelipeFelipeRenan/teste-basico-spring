@@ -24,5 +24,7 @@ public class ClienteModel extends RepresentationModel<ClienteModel> implements S
     @OneToMany( mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductModel> produtos = new ArrayList<>();
 
-
+    public void setProdutos(ProductModel produtos) {
+        this.produtos.add(produtos);
+    }
 }

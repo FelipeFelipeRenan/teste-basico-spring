@@ -2,6 +2,7 @@ package com.example.springboot.controllers;
 
 
 import com.example.springboot.models.ProductModel;
+import com.example.springboot.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -19,6 +20,9 @@ public class ProdutoController {
 
     @Autowired
     ProdutoRepository produtoRepository;
+
+    @Autowired
+    ClienteRepository clienteRepository;
 
     @GetMapping("/produtos")
     public ResponseEntity<List<ProductModel>> getAllProduto(){
