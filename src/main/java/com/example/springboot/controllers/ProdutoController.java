@@ -5,11 +5,10 @@ import com.example.springboot.models.ProductModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.springboot.repositories.ProdutoRepository;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,10 +40,39 @@ public class ProdutoController {
 
     }
 
+    @PostMapping("/produtos")
+    public ResponseEntity<ProductModel> saveProduto(@RequestBody @Valid ProductModel produto){
+        return new ResponseEntity<ProductModel>(produtoRepository.save(produto), HttpStatus.CREATED);
 
+    }
+
+    @DeleteMapping("/produtos/{id}")
+    public ResponseEntity<?> deleteProduto(@PathVariable(value = "id") long id){
+        Optional<ProductModel> produtoO = produtoRepository.findById(id);
+        if(!produtoO.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else{
+            produtoRepository.delete(produtoO.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+    }
+
+    @PutMapping("/produtos/{id}")
+    public ResponseEntity<ProductModel> updateProduto(@PathVariable(value = "id") long id, @RequestBody @Valid ProductModel produto){
+        Optional<ProductModel> produtoO = produtoRepository.findById(id);
+        if(!produtoO.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            produto.setIdProduto(produtoO.get().getIdProduto());
+            return new ResponseEntity<ProductModel>(produtoRepository.save(produto), HttpStatus.OK);
+        }
+    }
+    
     @GetMapping("/error")
-    public String responseError(){
-        return "ERROR DOIDO";
+    public ResponseEntity<?> responseError(){
+
+        return new ResponseEntity<>("Erro Inesperado", HttpStatus.BAD_REQUEST);
     }
 
 }
